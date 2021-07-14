@@ -11,23 +11,24 @@
   <ul id="country">
   </ul>
 </body>
-<script src="./src/countryCityState.js"></script>
-<script>
-  // const worker = new Worker('./src/worker.js');
-  let cities = []
-  // console.log(locationData.map(d=>d.states)[0])
-  locationData.map(d=>d.states).forEach(data=>{
-    data.map(d=>d.cities).map(d=>d.map(c=>cities.push(c.name)))
-  });
+<!-- <script src="./src/countryCityState.js"></script> -->
+<script defer>
+  const worker = new Worker('./src/worker.js');
+  let localCities = []
+
+  worker.onmessage = function({data}){
+    loadListing(data);
+  }
 
   function loadListing(list){
+    // console.log(list)
     document.querySelector('#country').innerHTML = '';
-    document.querySelector('#country').innerHTML = list.map(name=>(`<li>${name}</li>`)).join('')
+    document.querySelector('#country').innerHTML = list
   }
-  loadListing(cities);
 
   function onSearch(event){
-    loadListing(cities.filter(d=>d.match(new RegExp(event.target.value,'i'))))
+    // loadListing(localCities.filter(d=>d.match(new RegExp(event.target.value,'i'))))
+    worker.postMessage(event.target.value)
   }
 </script>
 </html>
