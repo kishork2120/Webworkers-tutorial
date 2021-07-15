@@ -4,31 +4,20 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Web workers</title>
 </head>
 <body>
-  <input type="search" onkeyup="onSearch(event)"/>
-  <ul id="country">
-  </ul>
+  Sample web workers
 </body>
-<!-- <script src="./src/countryCityState.js"></script> -->
-<script defer>
-  const worker = new Worker('./src/worker.js');
-  let localCities = []
+<script>
+  const worker = new Worker('src/worker.js');
 
-  worker.onmessage = function({data}){
-    loadListing(data);
+  worker.postMessage('Hi this is Js');
+
+  worker.onmessage = function(data){
+    console.log(data);
   }
 
-  function loadListing(list){
-    // console.log(list)
-    document.querySelector('#country').innerHTML = '';
-    document.querySelector('#country').innerHTML = list
-  }
-
-  function onSearch(event){
-    // loadListing(localCities.filter(d=>d.match(new RegExp(event.target.value,'i'))))
-    worker.postMessage(event.target.value)
-  }
+  worker.term
 </script>
 </html>
